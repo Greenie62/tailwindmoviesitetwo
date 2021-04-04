@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./dist/style.css">
+    <title>Movie Dashboard</title>
+</head>
+<body class='h-screen w-screen bg-black text-white text-center flex flex-col'>
+
+<div class="p-4">
+    <h1 class="text-5xl">Movie Site</h1>
+</div>
+
+<div class="flex-grow">
+    <div class="p-2">
+        <label class='text-2xl' for="title">Title:</label>
+        <input class='text-black w-1/2' type="text" name="title" placeholder="search for movie..." autocomplete="true" id="title">
+        <button class="bg-red-500 rounded p-1">Search</button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 data-div"></div>
+</div>
+
+<p class='text-1xl'>Footer&copy;</p>
+
+
+<script>
+    var searchBtn = document.querySelector("button");
+    let dataDiv = document.querySelector(".data-div")
+
+
+    searchBtn.onclick=(e)=>{
+            let title = document.querySelector("input[name='title']").value;
+                dataDiv.innerHTML = `<h3 class='text-3xl'>Searching for ${title}</h3>`     
+                title = title.trim();
+
+           fetch(`https://www.omdbapi.com?s=${title}&apikey=trilogy`)
+           .then(res=>res.json())
+           .then(res=>{
+               console.log(res)
+               let html=""
+               res.Search.forEach(t=>{
+                   html += `<div class='border-2 border-white rounded flex flex-col align-middle justify-evenly'><h3>${t.Title}</h3><img src=${t.Poster} alt="poster"/><button class='bg-green-400 p-2'>Rent</button></div>`
+               })
+
+               dataDiv.innerHTML = html
+           })
+    }
+</script>
+    
+</body>
+</html>
